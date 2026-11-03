@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Peer } from 'peerjs';
+import getPeerServerConfig from '../peerServerConfig';
 
 /**
  * useThirdEye  (desktop side)
@@ -19,10 +20,7 @@ const useThirdEye = () => {
 
     useEffect(() => {
         const peer = new Peer({
-            host: window.location.hostname,
-            port: window.location.port,
-            path: '/peerjs', // Proxy will pass this to the backend
-            secure: window.location.protocol.includes('https'),
+            ...getPeerServerConfig(),
             config: {
                 iceServers: [
                     { urls: 'stun:stun.l.google.com:19302' },

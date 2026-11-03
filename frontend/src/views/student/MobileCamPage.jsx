@@ -4,6 +4,7 @@ import { Peer } from 'peerjs';
 import { Box, Typography, Stack, Chip, GlobalStyles, Button } from '@mui/material';
 import VideocamRoundedIcon from '@mui/icons-material/VideocamRounded';
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
+import getPeerServerConfig from '../../peerServerConfig';
 
 /**
  * MobileCamPage
@@ -68,10 +69,7 @@ export default function MobileCamPage() {
 
             // 2. Create mobile peer
             const peer = new Peer({
-                host: window.location.hostname,
-                port: window.location.port,
-                path: '/peerjs',
-                secure: window.location.protocol.includes('https'),
+                ...getPeerServerConfig(),
                 config: {
                     iceServers: [
                         { urls: 'stun:stun.l.google.com:19302' },
