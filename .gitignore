@@ -1,0 +1,52 @@
+# Dependencies
+node_modules/
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Build output
+build/
+dist/
+target/
+.next/
+coverage/
+
+# Caches and temporary files
+.cache/
+cache/
+tmp/
+temp/
+*.tmp
+*.temp
+
+# Logs and debug output
+*.log
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+backend/db_results.txt
+frontend/app_output.txt
+frontend/build_error.txt
+frontend/eslint-results.txt
+frontend/eslint-utf8.txt
+frontend/eslint_output.txt
+
+# Compiled files
+*.class
+*.o
+*.obj
+*.dll
+*.exe
+
+# IDE and operating system files
+.idea/
+.vs/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/launch.json
+!.vscode/tasks.json
+.DS_Store
+Thumbs.db
+Desktop.ini
