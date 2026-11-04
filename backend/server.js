@@ -2,8 +2,13 @@ import dotenv from "dotenv";
 import { fileURLToPath } from "node:url";
 dotenv.config({ path: fileURLToPath(new URL("./.env", import.meta.url)) });
 
+if (!process.env.JWT_SECRET?.trim()) {
+  throw new Error("JWT_SECRET is not configured. Set it in backend/.env or the environment.");
+}
+
 import express from "express";
 import http from "http";
+import { isIP } from "node:net";
 import os from "os";
 import cors from "cors";
 import compression from "compression";
@@ -21,7 +26,39 @@ const app = express();
 
 // ── Middleware ────────────────────────────────────────────────────────────────
 app.use(compression());
-app.use(cors());
+const allowedOrigins = new Set(
+  [process.env.FRONTEND_URL, "http://localhost:3000", "https://localhost:3000"]
+    .filter(Boolean)
+    .map((origin) => new URL(origin).origin)
+);
+
+app.use(cors({
+  origin(origin, callback) {
+    if (!origin || allowedOrigins.has(origin)) {
+      return callback(null, true);
+    }
+
+    try {
+      const url = new URL(origin);
+      const octets = url.hostname.split(".").map(Number);
+      const [first, second] = octets;
+      const isPrivateIpv4 = isIP(url.hostname) === 4 && (
+        first === 10 ||
+        (first === 172 && second >= 16 && second <= 31) ||
+        (first === 192 && second === 168) ||
+        first === 127
+      );
+
+      if (["http:", "https:"].includes(url.protocol) && url.port === "3000" && isPrivateIpv4) {
+        return callback(null, true);
+      }
+    } catch (error) {
+      return callback(error);
+    }
+
+    return callback(new Error("Origin is not allowed by CORS"));
+  },
+}));
 app.use(express.json());
 
 // ── Routes ────────────────────────────────────────────────────────────────────
@@ -66,7 +103,7 @@ app.use(notFound);
 app.use(errorHandler);
 
 // Start the integrated server
-server.listen(port, () => {
+server.listen(port, "0.0.0.0", () => {
   console.log(`Integrated Server running on http://localhost:${port}`);
 });
 

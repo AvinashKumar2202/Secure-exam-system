@@ -96,6 +96,7 @@ Copy `.env.example` to `backend/.env`, then set the values for your environment.
 | `JWT_SECRET` | Yes | Secret used to sign authentication tokens; use a long, random value. |
 | `PORT` | No | Backend port; defaults to `5001`. |
 | `NODE_ENV` | No | Node environment, for example `development` or `production`. |
+| `FRONTEND_URL` | Production | Exact frontend origin allowed by the backend, for example `https://your-app.vercel.app`. |
 | `GEMINI_API_KEY` | For AI features | Google Gemini API key for the assistant and AI exam features. |
 | `EMAIL_USER` | For password-reset email | Email account used to send OTP messages. |
 | `EMAIL_PASS` | For password-reset email | Email provider app password; do not use or commit your account password. |
@@ -110,7 +111,7 @@ From the repository root, start the backend and frontend together:
 npm run dev
 ```
 
-The backend listens on `http://localhost:5001`; the frontend development server is available at `http://localhost:3000`. To run them separately, use `npm run dev` in `backend/` and `npm start` in `frontend/`.
+The backend listens on `http://localhost:5001`; the frontend development server is available at `http://localhost:3000`. To run them separately, use `npm run dev` in `backend/` and `npm start` in `frontend/`. The backend also allows local private-network frontend origins on port `3000` for the mobile-camera workflow.
 
 ## Contributors
 
